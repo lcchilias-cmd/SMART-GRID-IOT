@@ -1,0 +1,34 @@
+{
+  "name": "smartgrid-iot",
+  "version": "1.0.0",
+  "description": "Complete IoT Smart Grid Energy Consumption Monitoring System",
+  "scripts": {
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:rebuild": "docker-compose down -v && docker-compose up -d --build",
+    "docker:ps": "docker-compose ps",
+    "backend:dev": "cd backend && npm install && npm run dev",
+    "backend:start": "cd backend && npm start",
+    "backend:init-db": "cd backend && npm install && npm run init-db",
+    "frontend:dev": "cd frontend && npm install && npm run dev",
+    "frontend:build": "cd frontend && npm install && npm run build",
+    "generator:start": "cd generator && npm install && npm start",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../generator && npm install && cd ..",
+    "dev:all": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\" \"npm run generator:start\"",
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  },
+  "keywords": [
+    "IoT",
+    "MQTT",
+    "Energy",
+    "Smart Grid",
+    "Monitoring",
+    "Real-time"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

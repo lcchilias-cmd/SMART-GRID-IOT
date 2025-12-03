@@ -1,0 +1,67 @@
+### Smart Grid IoT - API Test Endpoints
+### Use with REST Client extension in VS Code
+
+@baseUrl = http://localhost:5000
+
+### ==== HOMES ENDPOINTS ====
+
+### Get all homes
+GET {{baseUrl}}/api/homes
+
+### Create a new home
+POST {{baseUrl}}/api/homes
+Content-Type: application/json
+
+{
+  "homeId": "H011",
+  "address": "999 Test Street",
+  "owner": "Test User"
+}
+
+### ==== CONSUMPTION ENDPOINTS ====
+
+### Get latest consumption for home H001
+GET {{baseUrl}}/api/consumption/H001
+
+### Get 24-hour consumption history for home H001
+GET {{baseUrl}}/api/consumption/H001/history
+
+### Get consumption history for home H002
+GET {{baseUrl}}/api/consumption/H002/history
+
+### Get consumption history for home H003
+GET {{baseUrl}}/api/consumption/H003/history
+
+### Get consumption history for home H004
+GET {{baseUrl}}/api/consumption/H004/history
+
+### Get consumption history for home H005
+GET {{baseUrl}}/api/consumption/H005/history
+
+### ==== ALERTS ENDPOINTS ====
+
+### Get all recent alerts
+GET {{baseUrl}}/api/alerts
+
+### ==== STATISTICS ENDPOINTS ====
+
+### Get overall statistics
+GET {{baseUrl}}/api/statistics
+
+### ==== SYSTEM CHECK ====
+
+### Check backend health (all homes)
+GET {{baseUrl}}/api/homes
+
+### Check backend response time
+GET {{baseUrl}}/api/statistics
+
+### ==== NOTES ====
+# To use these requests:
+# 1. Install "REST Client" extension in VS Code (by Huachao Mao)
+# 2. Click "Send Request" above any endpoint
+# 3. View response in the side panel
+
+# Available homes: H001 through H010
+# High alert threshold: > 1200W
+# Low alert threshold: < 250W

@@ -1,0 +1,118 @@
+version: '3.8'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: smartgrid-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+    networks:
+      - smartgrid-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "mosquitto_pub -h localhost -p 1883 -t test/health -m ok"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  mongodb:
+    image: mongo:7.0
+    container_name: smartgrid-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: smartgrid
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - smartgrid-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: smartgrid-backend
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://mongodb:27017/smartgrid
+      MQTT_BROKER: mqtt://mosquitto:1883
+      FRONTEND_URL: http://localhost:3000
+      NODE_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - smartgrid-network
+    restart: unless-stopped
+
+  init:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: smartgrid-init
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/smartgrid
+    entrypoint: ["npm", "run", "init-db"]
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - smartgrid-network
+    restart: "no"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: smartgrid-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:5000
+      NEXT_PUBLIC_SOCKET_URL: http://localhost:5000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - smartgrid-network
+    restart: unless-stopped
+
+  generator:
+    build:
+      context: ./generator
+      dockerfile: Dockerfile
+    container_name: smartgrid-generator
+    environment:
+      MQTT_BROKER: mqtt://mosquitto:1883
+      NODE_ENV: production
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    networks:
+      - smartgrid-network
+    restart: unless-stopped
+
+volumes:
+  mosquitto_data:
+  mosquitto_logs:
+  mongodb_data:
+
+networks:
+  smartgrid-network:
+    driver: bridge
