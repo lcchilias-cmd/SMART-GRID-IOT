@@ -1,0 +1,85 @@
+Smart Grid IoT – Domestic Energy Consumption Monitoring Systeme
+
+
+
+
+
+
+
+
+
+REALISED BY :
+-LAICHE AHMED ILIAS 
+-BOUTOBBA YAHIA AYOUB 
+-FRIHA LAICHE ANOUAR 
+
+
+                                                                               
+                          
+                                                                                          SUPERVISOR : 
+                                                                                          DR.MESSAOUDI
+
+1. Introduction
+This report presents the design and implementation of an IoT-based Smart Grid system aimed at monitoring domestic energy consumption in real-time. The project leverages MQTT communication, Mosquitto broker, MongoDB database, Node.js backend, and a React dashboard. The system includes simulated smart meters, automatic data generation, alert notifications, and live updates. The objective is to build a scalable, modular, and realistic smart energy monitoring environment.
+2. Problem Statement
+Traditional household energy monitoring systems lack real-time capabilities, remote access, predictive analytics, and integration with IoT technologies. This limits the user's ability to control consumption and detect anomalies. A smart grid solution using IoT ensures efficient monitoring, improved user awareness, and modern management of electricity usage.
+3. Objectives
+The main objectives of this project are:
+•	• Develop a real-time IoT energy monitoring system using MQTT and Mosquitto.
+•	• Collect, store, and visualize household consumption data.
+•	• Generate random but realistic smart meter data.
+•	• Create a dashboard displaying consumption per home.
+•	• Provide real-time alerts for high/low consumption.
+•	• Implement a modular backend using Node.js and MongoDB.
+4. Methodology
+The project follows an IoT engineering methodology based on system analysis, architectural design, implementation using VS Code and Docker, and evaluation through test data.
+5. System Architecture
+The system consists of multiple components communicating in real-time via MQTT. Smart meters publish energy usage values to the Mosquitto broker. The backend subscribes to these MQTT topics, stores the data in MongoDB, processes alerts, and feeds updates to a React dashboard.
+Architecture Diagram (Description)
+• Smart Meter Simulator → Publishes readings to MQTT topics.
+• Mosquitto Broker → Routes MQTT messages.
+• Node.js Backend → Subscribes, stores data, triggers alerts.
+• MongoDB → Stores consumption data.
+• React Dashboard → Visualizes usage and alerts with live updates.
+• Docker → (Optional) Containerizes the services.
+6. Technologies Used
+•	• MQTT + Mosquitto
+•	• Node.js + Express.js
+•	• MongoDB
+•	• React.js Dashboard
+•	• Docker Compose (optional)
+•	• JavaScript / JSON / REST API
+7. System Components
+7.1 MQTT Topics
+Example topics used by the smart meters:
+•	• home/1/energy
+•	• home/2/energy
+•	• home/3/energy
+7.2 MongoDB Schema
+{
+   homeId: Number,
+   timestamp: Date,
+   consumption: Number
+}
+7.3 Alert Logic
+Alerts generated when:
+•	• consumption > 6000W → High usage alert
+•	• consumption < 100W → Low usage alert
+8. Implementation
+The implementation includes the simulation of smart meter devices, backend API development, MQTT subscription logic, MongoDB connection, and the creation of a dynamic React dashboard.
+8.1 Smart Meter Simulator
+A Node.js script (or Python script) generates random consumption values at fixed intervals and publishes them to MQTT topics.
+8.2 Backend
+The Node.js backend listens to MQTT messages, stores them in MongoDB, and exposes APIs for the dashboard to retrieve real-time usage data.
+8.3 Dashboard
+The dashboard is built in React, showing per-home consumption, alerts, charts, and real-time updates thanks to WebSocket or periodic API refresh.
+9. Testing & Evaluation
+Testing includes:
+•	• Verifying MQTT message flow.
+•	• Validating MongoDB data insertion.
+•	• Checking live dashboard refresh.
+•	• Verifying alert thresholds.
+10. Results
+The system successfully demonstrates real-time energy monitoring with alerts, correct data storage, and a functional dashboard showing multiple households.
+11. Conclusion
+This project shows how IoT, MQTT, and modern web technologies can be combined into a fully functional smart grid monitoring solution. Future enhancements may include AI-based consumption prediction, mobile integration, and energy optimization algorithms.
